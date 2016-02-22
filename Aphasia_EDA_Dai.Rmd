@@ -1,0 +1,39 @@
+---
+title: "EDA-Analysis"
+author: "Dai Chen"
+date: "February 16, 2016"
+output: html_document
+---
+
+```{r}
+age =c(74,75,54,79,56,64,67,66,61,58,75,60,47,58,67,76,68,59,71,53,75,71,50,68,71,58,87,65,50,72,52,66,71,53,38,46,38,83,68,66,74,74,55,72,56,70,68,74,67,66,64)
+hist(age)
+
+LQ =c(NA,66.90,28.20,0,88.40,78.70,79.40,47.50,92.60,86.10,70.30,75.60,94.30,69.10,43.40,61.90,68.20,98.80,15.50,53.40,95.70,44.60,54.40,60.00,35.30,85.10,86.60,47.60,92.20,84.20,88.90,43.00,NA,87.80,98.60,70.20,78.10,87.30,93.50,93.20,54.90,NA,96.70,23.30,98.00,31.00,35.40,90.30,99.10,27.80,75.80)
+
+de.data = data.frame(seq(1,51),age)
+names(de.data) = c("id","age")
+de.data$exp = ifelse(de.data$id%in%c(12,19, 20, 26, 27, 28, 39, 47, 48), 0, 1)
+names(de.data) = c("id","age","exp")
+
+control <- de.data[de.data$exp==0,]
+exp <- de.data[de.data$exp==1,]
+
+par(mfrow=c(1,2))
+hist(control$age)
+hist(exp$age)
+boxplot(control$age)
+boxplot(exp$age)
+
+summary(control$age)
+summary(exp$age)
+```
+
+
+
+```{r}
+setwd("~/Desktop/Aphasia")
+WAB <- read.csv("WAB.csv")
+```
+
+
