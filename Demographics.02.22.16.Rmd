@@ -1,0 +1,78 @@
+---
+title: "Aphasia Demographics"
+author: "Jennifer Lee (hlee1), Dai Chen (daic)"
+date: "February 22, 2016"
+output: pdf_document
+---
+
+```{r, cache=TRUE}
+dem2 = read.csv("demographics-2 and subtest scores.csv", header=TRUE)
+dem2 = dem2[1:51,1:5]
+
+dem2wab = read.csv("demographics-2 WAB.csv", header=TRUE, skip=1)
+dem2wab = dem2wab[,-1]
+
+dem2clqt = read.csv("demographics-2 CLQT.csv", header=TRUE, skip=1)
+dem2clqt = dem2clqt[,-1]
+
+dem2bnt = read.csv("demographics-2 BNT.csv", header=TRUE, skip=1)
+dem2bnt = dem2bnt[,-1]
+
+dem2papt = read.csv("demographics-2 PAPT.csv", header=TRUE, skip=1)
+dem2papt = dem2papt[,-1]
+```
+
+```{r, fig.height=12, fig.width=8}
+library(pander)
+dem = cbind(dem2, dem2wab, dem2clqt, dem2bnt, dem2papt)
+names(dem) = tolower(names(dem))
+
+
+controls = c(12,19, 20, 26, 27, 28, 39, 47, 48)
+dem$control = 0
+dem[controls, "control"]=1
+dem$control = factor(dem$control, levels=c(0,1), labels=c("Treat", "Control"))
+
+temp = dem$education
+temp = droplevels(temp)
+temp[temp=="unknown"]=NA
+as.numeric(as.character(temp))
+
+```
+
+This will not run yet, the code needs to be cleaned
+
+par(mfrow=c(3,2))
+boxplot(dem$age~dem$control, main="Age distribution", xlab="Patient type",
+        ylab="Age")
+boxplot(as.numeric(dem$education)~dem$control, main="Education distribution", xlab="Patient type",
+        ylab="Age")
+
+boxplot(dem$language.quotient~dem$control, main="Pre WAB LQ score distribution", 
+        xlab="Patient type", ylab="WAB LQ score")
+boxplot(dem$language.quotient.1~dem$control, main="Post WAB LQ score distribution", 
+        xlab="Patient type", ylab="WAB LQ score")
+
+boxplot(dem$cortical.quotient~dem$control, main="Pre WAB CQ score distribution", 
+        xlab="Patient type", ylab="WAB CQ score")
+boxplot(dem$cortical.quotient.1~dem$control, main="Post WAB CQ score distribution", 
+        xlab="Patient type", ylab="WAB CQ score")
+
+boxplot(dem$aphasia.quotient~dem$control, main="Pre WAB AQ score distribution", 
+        xlab="Patient type", ylab="WAB AQ score")
+boxplot(dem$aphasia.quotient.1~dem$control, main="Post WAB AQ score distribution", 
+        xlab="Patient type", ylab="WAB AQ score")
+
+boxplot(as.numeric(dem$clqt.attention)~dem$control, main="Pre CLQT attention distribution", 
+        xlab="Patient type", ylab="CLQT attention score")
+boxplot(as.numeric(dem$clqt.attention.1)~dem$control, main="Post CLQT attention distribution", 
+        xlab="Patient type", ylab="CLQT attention score")
+
+boxplot(as.numeric(dem$clqt.memory)~dem$control, main="Pre CLQT memory distribution", 
+        xlab="Patient type", ylab="CLQT memory score")
+boxplot(as.numeric(dem$clqt.memory.1)~dem$control, main="Post CLQT memory distribution", 
+        xlab="Patient type", ylab="CLQT memory score")
+
+pander(table(dem$aphasia.type, dem$control))
+pander(table(dem$aphasia.type.1, dem$control))
+```
