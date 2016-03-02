@@ -5,7 +5,7 @@ date: "February 16, 2016"
 output: html_document
 ---
 
-```{r}
+```{r, echo=TRUE}
 age =c(74,75,54,79,56,64,67,66,61,58,75,60,47,58,67,76,68,59,71,53,75,71,50,68,71,58,87,65,50,72,52,66,71,53,38,46,38,83,68,66,74,74,55,72,56,70,68,74,67,66,64)
 hist(age)
 
@@ -33,7 +33,9 @@ summary(exp$age)
 
 ```{r}
 setwd("~/Desktop/Aphasia")
-WAB <- read.csv("WAB.csv")
+WAB <- read.csv("WAB.csv", header = T, skip = 1)
+
+WAB[1,]
 ```
 
 
