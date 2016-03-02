@@ -4,8 +4,9 @@ author: "Dai Chen"
 date: "March 1, 2016"
 output: pdf_document
 ---
-
-```{r}
+## Difference Between Post and Pre
+```{r,warning=FALSE,echo=FALSE}
+setwd("~/Desktop/Aphasia/Dai-EDA2")
 dem2 = read.csv("demographics-2.and.subtest.scores.csv", header=TRUE)
 dem2 = dem2[1:51,1:5]
 
@@ -37,12 +38,20 @@ dem$clqt.attention = sub("%", "", dem$clqt.attention)
 dem$clqt.attention.1 = sub("%", "", dem$clqt.attention.1)
 dem$clqt.memory = sub("%", "", dem$clqt.memory)
 dem$clqt.memory.1 = sub("%", "", dem$clqt.memory.1)
+dem$total.percentage = as.numeric(sub("%", "", dem$total.percentage))
+dem$total.percentage.1 = as.numeric(sub("%", "", dem$total.percentage.1))
+dem$x3.pictures...total.percentage = as.numeric(sub("%", "", dem$x3.pictures...total.percentage))
+dem$x3.pictures...total.percentage.1  = as.numeric(sub("%", "", dem$x3.pictures...total.percentage.1))
+
+
 
 edaVar = c("language.quotient","language.quotient.1",
            "cortical.quotient","cortical.quotient.1",
            "aphasia.quotient","aphasia.quotient.1",
            "clqt.attention","clqt.attention.1",
-           "clqt.memory","clqt.memory.1")
+           "clqt.memory","clqt.memory.1",
+           "total.percentage","dem$total.percentage.1",
+           "x3.pictures...total.percentage","x3.pictures...total.percentage.1")
 
 edaVarID = which(names(dem) %in% edaVar)
 
@@ -50,34 +59,33 @@ for (i in edaVarID) {
   dem[,i] = as.numeric(as.character(dem[,i]))
 }
 
-par(mfrow=c(3,2))
-boxplot(dem$age~dem$control, main="Age distribution", xlab="Patient type",
-        ylab="Age")
-boxplot(as.numeric(dem$education)~dem$control, main="Education distribution", xlab="Patient type",
-        ylab="Age")
+## WAB ##
+boxplot(dem$language.quotient.1-dem$language.quotient~dem$control, main="Pre WAB LQ score distribution", 
+        xlab="Patient type", ylab="Post-Pre WAB LQ score")
 
-boxplot(dem$language.quotient~dem$control, main="Pre WAB LQ score distribution", 
-        xlab="Patient type", ylab="WAB LQ score")
-boxplot(dem$language.quotient.1~dem$control, main="Post WAB LQ score distribution", 
-        xlab="Patient type", ylab="WAB LQ score")
+boxplot(dem$cortical.quotient.1-dem$cortical.quotient~dem$control, main="Pre WAB CQ score distribution", 
+        xlab="Patient type", ylab="Post-Pre WAB CQ score")
 
-boxplot(dem$cortical.quotient~dem$control, main="Pre WAB CQ score distribution", 
-        xlab="Patient type", ylab="WAB CQ score")
-boxplot(dem$cortical.quotient.1~dem$control, main="Post WAB CQ score distribution", 
-        xlab="Patient type", ylab="WAB CQ score")
+boxplot(dem$aphasia.quotient.1-dem$aphasia.quotient~dem$control, main="Pre WAB AQ score distribution", xlab="Patient type", ylab="Post-Pre WAB AQ score")
 
-boxplot(dem$aphasia.quotient~dem$control, main="Pre WAB AQ score distribution", 
-        xlab="Patient type", ylab="WAB AQ score")
-boxplot(dem$aphasia.quotient.1~dem$control, main="Post WAB AQ score distribution", 
-        xlab="Patient type", ylab="WAB AQ score")
+## CLQT ##
+boxplot(dem$clqt.attention.1-dem$clqt.attention~dem$control, main="Pre CLQT attention distribution", xlab="Patient type", ylab="Post-Pre CLQT attention score")
 
-boxplot(dem$clqt.attention~dem$control, main="Pre CLQT attention distribution", 
-        xlab="Patient type", ylab="CLQT attention score")
-boxplot(dem$clqt.attention.1~dem$control, main="Post CLQT attention distribution", 
-        xlab="Patient type", ylab="CLQT attention score")
-boxplot(as.numeric(dem$clqt.memory)~dem$control, main="Pre CLQT memory distribution", 
-        xlab="Patient type", ylab="CLQT memory score")
-boxplot(as.numeric(dem$clqt.memory.1)~dem$control, main="Post CLQT memory distribution", 
-        xlab="Patient type", ylab="CLQT memory score")
+boxplot(as.numeric(dem$clqt.memory.1)-as.numeric(dem$clqt.memory)~dem$control, main="Post-Pre CLQT memory distribution", xlab="Patient type", ylab="CLQT memory score")
 
+## BNT ##
+boxplot(dem$total.percentage.1-dem$total.percentage~dem$control, main="Post-Pre CLQT memory distribution", xlab="Patient type", ylab="CLQT memory score")
+
+## PAPT ##
+boxplot(dem$x3.pictures...total.percentage.1-dem$x3.pictures...total.percentage~dem$control, main="Post-Pre CLQT memory distribution", xlab="Patient type", ylab="CLQT memory score")
+```
+
+
+## Characteristics of Broca's and Anomic
+```{r,echo=FALSE}
+boxplot(dem$age[dem$aphasia.type=="Anomic"],dem$age[dem$aphasia.type=="Broca's"],names=c("Anomic","Broca's"),main="Comparison for Age")
+
+boxplot(dem$education[dem$aphasia.type=="Anomic"],dem$education[dem$aphasia.type=="Broca's"],names=c("Anomic","Broca's"),main="Comparison for Education")
+
+boxplot(dem$mpo.at.intake.date[dem$aphasia.type=="Anomic"],dem$mpo.at.intake.date[dem$aphasia.type=="Broca's"],names=c("Anomic","Broca's"),main="Comparison for Education")
 ```
